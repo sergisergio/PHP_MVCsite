@@ -1,0 +1,549 @@
+<?php
+
+/* ********************* RESUME *****************************
+
+1 . PAGE D'ACCUEIL.
+2 . PAGE DE CONNEXION.
+3 . PAGE D'INSCRIPTION.
+4 . PAGE DE PROFIL.
+5 . INSCRIPTION.
+6 . CONNEXION.
+7 . SE SOUVENIR DE MOI.
+8 . DECONNEXION.
+9 . DOUBLON PSEUDO.
+10. DOUBLON EMAIL.
+11. CONFIRMATION INSCRIPTION.
+12. PASSER USER EN ACTIF.
+13. AFFICHER TOUS LES BLOG POSTS.
+14. AFFICHER UN SEUL BLOG POST.
+15. AJOUTER UN COMMENTAIRE.
+16. AFFICHER LA PAGE POUR MODIFIER UN COMMENTAIRE.
+17. SUPPRIMER UN COMMENTAIRE.
+18. MODIFIER UN COMMENTAIRE.
+19. AFFICHER LA PAGE MOT DE PASSE OUBLIE.
+20. AFFICHER LA PAGE DE MODIFICATION DU MOT DE PASSE 1.
+21. AFFICHER LA PAGE DE MODIFICATION DU MOT DE PASSE 2.
+22. MODIFIER LE MOT DE PASSE.
+23. SUPPRIMER MON COMPTE.
+24. ERRORS.
+25. SEARCH.
+26. MODIFIER LE PROFIL.
+27 à 34. COULEURS.
+35. PROFIL PUBLIC.
+
+******************** FIN RESUME ****************************/
+
+require_once('model/PostManager.php');
+require_once('model/CommentManager.php');
+require_once('model/UserManager.php');
+
+/* ***************** 1 . PAGE D'ACCUEIL **********************/
+
+function home(){
+
+    require('view/frontend/home.php');
+}
+
+/* ***************** 2 . PAGE CONNEXION **********************/
+
+function loginPage(){
+
+	require('view/frontend/login.php');
+}
+
+/* ***************** 3 . PAGE INSCRIPTION ********************/
+
+function signupPage(){
+    
+	require('view/frontend/signup.php');
+}
+
+/* ***************** 4 . PAGE PROFIL *************************/
+
+function profilePage($userId){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $post = $userManager->getUser($userId);
+    require('view/frontend/profile.php');
+}
+
+/* ****************  5 . INSCRIPTION *************************/
+
+function addUser($pseudo, $email, $passe){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $users = $userManager->addUserRequest($pseudo, $email, $passe);
+     if ($users === false) {
+        $_SESSION['flash']['danger'] = 'Inscription impossible !';
+        signupPage();
+        exit();
+    } 
+    else {
+        $_SESSION['flash']['success'] = 'Un mail de confirmation vous a été envoyé pour valider votre compte';
+        loginPage();
+        exit();
+    } 
+}
+
+/* ***************** 6 . CONNEXION ***************************/
+
+function login($pseudo,$passe){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $user = $userManager->loginRequest($pseudo,$passe);
+    
+    if(password_verify($passe, $user['password'])) {
+        if ($user['is_active'] == 1) {
+            
+        $_SESSION['pseudo'] = $user['pseudo'];
+        $_SESSION['id'] = $user['id'];
+        $_SESSION['prenom'] = $user['first_name'];
+        $_SESSION['nom'] = $user['last_name'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['password'] = $user['password'];
+        $_SESSION['autorisation'] = $user['authorization'];
+        $_SESSION['avatar'] = $user['avatar'];
+        $_SESSION['registration'] = $user['registration_date_fr'];
+        $_SESSION['description'] = $user['description'];
+        $_SESSION['color'] = $user['color'];
+        // echo '<div class="alert alert-success">' . 'Bienvenue ' . $_SESSION['pseudo'] . ' : Vous êtes à présent connecté' . '</div>' . '<br />';
+        header('Location: index.php?action=blog');
+        exit();
+        }
+        else {
+            $_SESSION['flash']['danger'] = 'Vous devez activer votre compte via le lien de confirmation dans le mail envoyé !';
+            loginPage();
+            exit();
+        }
+    }
+    else {
+        $_SESSION['flash']['danger'] = 'Mauvais identifiant ou mot de passe !';
+        loginPage();
+        exit();
+    }
+}
+
+/* ***************** 7 . SE SOUVENIR DE MOI ******************/
+
+function remember($rememberToken){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $userId = $_SESSION['id'];
+    $req = $userManager->rememberRequest($userId, $rememberToken);
+}
+
+/* ***************** 8 . DECONNEXION *************************/
+
+function logout(){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $users = $userManager->logoutRequest();
+    echo '<div class="alert alert-success">' . ' A bientôt !' . '</div>' . '<br />';
+}
+
+/* ***************** 9 . DOUBLON PSEUDO **********************/
+
+function checkExistPseudo($pseudo){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $user = $userManager->existPseudo($pseudo);
+
+     if ($user) {
+        $_SESSION['flash']['danger'] = 'Ce pseudo est déjà pris !';
+        signupPage();
+        exit();
+    }
+}
+
+/* **************** 10 . DOUBLON MAIL ************************/
+
+function checkExistMail($email){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $usermail = $userManager->existMail($email);
+
+     if ($usermail) {
+        $_SESSION['flash']['danger'] = 'Cet email est déjà utilisé !';
+        signupPage();
+        exit();
+    }
+}
+
+/* **************** 11 . CONFIRMATION INSCRIPTION ************/
+
+function confirmRegistration($userId, $userToken){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $user = $userManager->getUser($userId);
+     
+    if ($user &&  $user['confirmation_token'] == $userToken) {
+        
+        $userManager->setActiveRequest($userId);
+        $_SESSION['flash']['success'] = 'Votre inscription a bien été prise en compte ! Vous pouvez vous connecter !';
+        loginPage();
+        exit();
+    }
+    else {
+        $_SESSION['flash']['success'] = 'Ce token n est plus valide ! Veuillez réessayer ! !';
+        signupPage();
+        exit();
+    }   
+}
+
+/* **************** 12 . PASSER USER EN ACTIF. ***************/
+
+function setActiveUser($userId){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $activeUser = $userManager->setActiveRequest($userId);
+}
+
+/* **************** 13 . TOUS LES BLOG POSTS *****************/
+
+function listPosts(){
+	$postManager = new \Philippe\Blog\Model\PostManager();
+    $postsTotal = $postManager->countPosts();
+    $postsPerPage = 5;
+    $totalPages = ceil($postsTotal / $postsPerPage);
+
+    if(isset($_GET['page']) AND !empty($_GET['page']) AND ($_GET['page'] > 0 ) AND ($_GET['page'] <= $totalPages)){
+        $_GET['page'] = intval($_GET['page']);
+        $currentPage = $_GET['page'];
+    }
+    else {
+        $currentPage = 1;
+    }
+    $start = ($currentPage-1)*$postsPerPage;
+    $posts = $postManager->getPosts($start, $postsPerPage);
+    $posts1 = $postManager->getPosts(0, 5);
+
+    require('view/frontend/blog.php');
+}
+
+/* **************** 14 . AFFICHER UN SEUL BLOG POST **********/
+
+function listPost(){
+	$postManager = new \Philippe\Blog\Model\PostManager();
+	$commentManager = new \Philippe\Blog\Model\CommentManager();
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $posts1 = $postManager->getPosts(0, 5);
+    $post = $postManager->getPost($_GET['id']);
+    $comments = $commentManager->getComments($_GET['id']);
+    $user = $userManager->getUser($_GET['id']);
+    $nbCount = $commentManager->countCommentRequest($_GET['id']);
+    
+    require('view/frontend/blog_post.php');
+}
+
+/* **************** 15 . AJOUTER UN COMMENTAIRE **************/
+
+function addComment($postId, $author, $content){
+	$commentManager = new \Philippe\Blog\Model\CommentManager();
+	$affectedLines = $commentManager->postComment($postId, $author, $content);
+
+	if ($affectedLines === false) {
+        echo '<div class="alert alert-danger">' . 'Vous devez être inscrit pour ajouter un commentaires' . '</div>';
+    }
+    else {
+        header('Location: index.php?action=blogpost&id=' . $postId . '#comments');
+    }
+}
+
+/* **************** 16 . PAGE POUR MODIFIER UN COMMENTAIRE ***/
+
+function modifyCommentPage($commentId){
+	$postManager = new \Philippe\Blog\Model\PostManager();
+	$commentManager = new \Philippe\Blog\Model\CommentManager();
+
+	$comment = $commentManager->getComment($commentId);
+	$post = $postManager->getPost($comment['post_id']);
+
+	require('view/frontend/modifyView.php');
+}
+
+/* **************** 17 . SUPPRIMER UN COMMENTAIRE ************/
+function deleteComment($commentId){
+    $commentManager = new \Philippe\Blog\Model\CommentManager();
+    $comment = $commentManager->getComment($commentId);
+    $success = $commentManager->deleteCommentRequest($commentId);
+    
+    if ($success === false) {
+        throw new Exception('Impossible de supprimer le commentaire');
+    }
+    else {
+        header('Location: index.php?action=blogpost&id=' . $comment['post_id'] . '#comments');
+    }
+}
+
+/* **************** 18 . MODIFIER UN COMMENTAIRE *************/
+
+function modifyComment($commentId, $author, $content){
+    $commentManager = new \Philippe\Blog\Model\CommentManager();
+    $success = $commentManager->modifyCommentRequest($commentId, $author, $content);
+    $comment = $commentManager->getComment($commentId);
+
+    if ($success === false) {
+        throw new Exception('Impossible de modifier le commentaire !');
+    }
+    else {
+        header('Location: index.php?action=blogpost&id=' . $comment['post_id'] . '#comments');
+    }
+}
+
+/* **************** 19 . PAGE MOT DE PASSE OUBLIE ************/
+
+function forgetPasswordPage(){
+
+    require('view/frontend/forget.php');
+}
+
+/* **************** 20 . PAGE MODIFICATION MOT DE PASSE 1 ****/
+
+function forgetPassword($email){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $user = $userManager->forgetPasswordRequest($email);
+
+    if ($user === false) {
+        $_SESSION['flash']['success'] = 'Une erreur est survenue !';
+        loginPage();
+        exit();
+    }
+    else {
+        $_SESSION['flash']['success'] = 'Vous allez recevoir un email pour réinitialiser votre mot de passe !';
+        loginPage();
+        exit();
+    } 
+}
+/* **************** 21. PAGE  DE MODIF MOT DE PASSE 2 ********/
+
+function changePasswordPage($userId, $resetToken){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $user = $userManager->checkResetTokenRequest($userId);
+    if ($user &&  $user['reset_token'] == $resetToken) {
+    require('view/frontend/changePassword.php');
+    }
+    else {
+        echo 'Ce token n est plus valide ! Veuillez réessayer !';
+    }
+}
+
+/* **************** 22. MODIFIER MOT DE PASSE ****************/
+
+function changePassword($userId, $passe){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    if(!empty($_POST['passe']) && $_POST['passe'] == $_POST['passe2']){
+        $userManager->changePasswordRequest($userId, $passe);
+            $_SESSION['flash']['success'] = 'Le mot de passe a bien été réinitialisé !';
+            loginPage();
+            exit();
+    }
+    else {
+        echo 'Veuillez entrer un mot de passe';
+    }
+}
+
+/* **************** 23. SUPPRIMER MON COMPTE *****************/
+
+function deleteAccount($userId){
+    $userManager = new \Philippe\Blog\Model\UserManager();
+    $deleteAccount = $userManager->deleteAccountRequest($userId);
+    $userManager->logoutRequest();
+
+    if ($deleteAccount === false) {
+        throw new Exception('Impossible de supprimer le profil');
+    }
+    else {
+        header('Location: index.php?action=blog');
+    }
+}
+
+/* **************** 24. ERRORS ******************************/
+
+function errors(){
+
+    require('view/frontend/errors.php');
+}
+
+/* **************** 25 . SEARCH ******************************/
+
+function search($search){
+
+    $postManager = new \Philippe\Blog\Model\PostManager();
+    $posts1 = $postManager->getPosts(0, 5);
+    $countSearchResults = $postManager->countSearchRequest($search);
+    $nbResults = $countSearchResults->rowCount();
+    $results = $postManager->searchRequest($search);
+    require('view/frontend/searchresults.php');
+}
+
+/* **************** 26 . MODIFIER LE PROFIL ******************************/
+
+function modifyProfile($userId, $first_name, $name, $email, $description){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $modifiedProfile = $userManager->modifyProfileRequest($userId, $first_name, $name, $email, $description);
+
+    if ($modifiedProfile === false) {
+        throw new Exception('Impossible de modifier le profil');
+    }
+    else {
+        header('Location: index.php?action=profilePage');
+    }
+}
+
+/* **************** 27 . CHANGE COLOR YELLOW ******************************/
+
+function changeColorYellow($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorYellow = $userManager->changeColorYellowRequest($userId);
+
+    if ($colorYellow === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'yellow';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 28 . CHANGE COLOR AQUA ******************************/
+
+function changeColorAqua($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorAqua = $userManager->changeColorAquaRequest($userId);
+
+    if ($colorAqua === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'aqua';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 29 . CHANGE COLOR BLUE ******************************/
+
+function changeColorBlue($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorBlue = $userManager->changeColorBlueRequest($userId);
+
+    if ($colorBlue === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'blue';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 30 . CHANGE COLOR GRAY ******************************/
+
+function changeColorGray($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorGray = $userManager->changeColorGrayRequest($userId);
+
+    if ($colorGray === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'gray';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 31 . CHANGE COLOR GREEN ******************************/
+
+function changeColorGreen($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorGreen = $userManager->changeColorGreenRequest($userId);
+
+    if ($colorGreen === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = '';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 32 . CHANGE COLOR ORANGE ******************************/
+
+function changeColorOrange($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorOrange = $userManager->changeColorOrangeRequest($userId);
+
+    if ($colorOrange === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'orange';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 33 . CHANGE COLOR PINK ******************************/
+
+function changeColorPink($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorPink = $userManager->changeColorPinkRequest($userId);
+
+    if ($colorPink === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'pink';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 34 . CHANGE COLOR RED ******************************/
+
+function changeColorRed($userId){
+
+    $userManager = new \Philippe\Blog\Model\UserManager();
+
+    $colorRed = $userManager->changeColorRedRequest($userId);
+
+    if ($colorRed === false) {
+        throw new Exception('Impossible de modifier le thème');
+    }
+    else {
+    unset($_SESSION['color']);
+        $_SESSION['color'] = 'red';
+        $_SESSION['flash']['success'] = 'Bien joué !';
+        header('Location: index.php?action=blog#colortheme');
+    }
+}
+
+/* **************** 35 . PROFIL PUBLIC ******************************/
+
+function publicProfile($commentAuthor){
+    
+    $commentManager = new \Philippe\Blog\Model\CommentManager();
+    $user = $commentManager->getUserByCommentRequest($commentAuthor);
+    require('view/frontend/publicProfile.php');
+}
