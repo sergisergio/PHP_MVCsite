@@ -37,36 +37,25 @@
                             <div class="form-container">
                             <?php if(isset($_SESSION['flash'])): ?>
                                 <?php foreach($_SESSION['flash'] as $type => $message): ?>
-                                <div class="text-center alert alert-<?= $type; ?>">
+                                <div class="text-center alert alert-<?= $type; ?>" style="font-weight: bold; text-align: center;">
                                     <?= $message; ?>
                                 </div>
                                 <?php endforeach; ?>
                                 <?php unset($_SESSION['flash']); ?>
                             <?php endif; ?>
                             </div>
-                            <btn class="btn btn-default"><a href="index.php">Accueil</a></btn>
-                            <btn class="btn btn-default"><a href="index.php?action=blog">blog</a></btn>
+                            <div class="row">
+                                <div class="col-md-6">
+                            <btn class="btn btn-default pull-right"><a href="index.php">Accueil</a></btn>
+                                </div>
+                                <div class="col-md-6">
+                            <btn class="btn btn-default pull-left"><a href="index.php?action=blog">blog</a></btn>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 </div>
         </div>
 <?php $content = ob_get_clean(); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
-    <?php require('view/frontend/colortemplates/aquatemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'blue'): ?>
-    <?php require('view/frontend/colortemplates/bluetemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'gray'): ?>
-    <?php require('view/frontend/colortemplates/graytemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'orange'): ?>
-    <?php require('view/frontend/colortemplates/orangetemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'pink'): ?>
-    <?php require('view/frontend/colortemplates/pinktemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
-    <?php require('view/frontend/colortemplates/aquatemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'red'): ?>
-    <?php require('view/frontend/colortemplates/redtemplate.php'); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'yellow'): ?>
-    <?php require('view/frontend/colortemplates/yellowtemplate.php'); ?>
-<?php else: ?>
+
     <?php require('template.php'); ?>
-<?php endif; ?>

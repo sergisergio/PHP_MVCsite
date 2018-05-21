@@ -219,6 +219,11 @@ function listPost(){
 
     $posts1 = $postManager->getPosts(0, 5);
     $post = $postManager->getPost($_GET['id']);
+    if (empty($post)) {
+        $_SESSION['flash']['danger'] = 'Aucun id ne correspond à ce billet !';
+                errors();
+                exit();
+    }
     $comments = $commentManager->getComments($_GET['id']);
     $user = $userManager->getUser($_GET['id']);
     $nbCount = $commentManager->countCommentRequest($_GET['id']);
