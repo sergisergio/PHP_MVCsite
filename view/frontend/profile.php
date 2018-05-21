@@ -75,7 +75,11 @@
                                     </div>
                                 </div>
 
-                                <form action="index.php?action=modifyProfile&amp;id=<?= $_SESSION['id'] ?>" method="post">
+                                <form action="index.php?action=modifyProfile&amp;id=<?= $_SESSION['id'] ?>" method="post" enctype="multipart/form-data">
+                                    <div>
+                                        <label for="content">Ajouter un avatar (1M max: jpg, jpeg, gif, png)</label><br />
+                                         <input style="text-align: center;margin: 0 auto;" type="file" name="avatar" />
+                                    </div>
                                     <div>
                                         <label for="first_name">Prénom</label><br />
                                         <input type="text" id="first_name" name="first_name" value="<?= $post['first_name'] ?>" />

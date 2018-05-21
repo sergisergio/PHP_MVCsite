@@ -300,12 +300,12 @@ class UserManager extends Manager
 
 /* ************** 19 . MODIFIER LE PROFIL *****************************/
 
-	public function modifyProfileRequest($userId, $first_name, $name, $email, $description) {
+	public function modifyProfileRequest($userId, $avatar, $first_name, $name, $email, $description) {
 		$dbProjet5 = $this->dbConnect();
 
-		$req = $dbProjet5->prepare('UPDATE Users SET first_name = ?, last_name = ?, email = ?, description = ? WHERE id = ?');
+		$req = $dbProjet5->prepare('UPDATE Users SET avatar = ?, first_name = ?, last_name = ?, email = ?, description = ? WHERE id = ?');
 
-		$modifiedProfile = $req->execute(array($first_name, $name, $email, $description, $userId));
+		$modifiedProfile = $req->execute(array($avatar, $first_name, $name, $email, $description, $userId));
 
 
 		return $modifiedProfile;

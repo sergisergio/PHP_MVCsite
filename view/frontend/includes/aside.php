@@ -43,6 +43,9 @@
                                 <li><a href="https://openclassrooms.com/courses/construisez-une-api-rest-avec-symfony" target="_blank">API REST avec Symfony</a></li>
                                 <li><a href="https://openclassrooms.com/courses/testez-et-suivez-l-etat-de-votre-application-php" target="_blank">Tester une application PHP</a></li>
                                 <li><a href="https://openclassrooms.com/courses/testez-fonctionnellement-votre-application-symfony" target="_blank">Tester une application Symfony</a></li>
+                                <hr style="padding-bottom: 0px; margin-bottom: 20px;">
+                                <li><a href="https://openclassrooms.com/courses/upload-de-fichiers-par-formulaire" target="_blank">PHP : Upload de fichiers</a></li>
+
                               </ul>
                             </div>
                         </div>
