@@ -1,5 +1,58 @@
-<?php $title = 'Mon portfolio'; ?>
-<?php ob_start(); ?>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta prefix="og: http://ogp.me/ns#" property="og:title" content="Philippe Traon | Développeur web" />
+        <meta prefix="og: http://ogp.me/ns#" property="og:type" content="article" />
+        <meta prefix="og: http://ogp.me/ns#" property="og:url" content="http://philippetraon.com/?42" />
+        <meta prefix="og: http://ogp.me/ns#" property="og:image" content="http://philippetraon.com/public/images/ogimage.png" />
+        <meta property="og:image:width" content="180" />
+        <link rel="icon" type="image/ico" href="public/images/Philippe.ico" />
+        <title>Philippe Traon - Développeur web</title>
+        <!-- Bootstrap core CSS -->
+        <link href="public/css/bootstrap.min.css" rel="stylesheet">
+        <link href="public/css/plugins.css" rel="stylesheet">
+        <link href="public/css/prettify.css" rel="stylesheet">
+        <link href="public/style.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
+        <link href="public/css/color/aqua.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'blue'): ?>
+        <link href="public/css/color/blue.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'gray'): ?>
+        <link href="public/css/color/gray.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'orange'): ?>
+        <link href="public/css/color/orange.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'pink'): ?>
+        <link href="public/css/color/pink.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'red'): ?>
+        <link href="public/css/color/red.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'yellow'): ?>
+        <link href="public/css/color/yellow.css" rel="stylesheet">
+        <?php else: ?>
+            <link href="public/css/color/green.css" rel="stylesheet">
+        <?php endif; ?>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,800,700,600,500,300' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
+        <link href="public/type/fontello.css" rel="stylesheet">
+        <link href="public/type/budicons.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="style/js/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+          <![endif]-->
+    </head>
+    <body class="full-layout">
+        <div id="preloader">
+            <div id="status">
+                <div class="loadcircle"></div>
+            </div>
+        </div>
+        <div class="body-wrapper">
+                        <?php include "includes/nav.php"; ?>
 
             <section id="home" class="naked">
                 <div class="fullscreenbanner-container revolution">
@@ -50,23 +103,64 @@
                 <?php include "includes/footer.php"; ?>
             </div>
         </div>
-<?php $content = ob_get_clean(); ?>
-<?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
-    <?php require('view/frontend/colortemplates/aquatemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'blue'): ?>
-    <?php require('view/frontend/colortemplates/bluetemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'gray'): ?>
-    <?php require('view/frontend/colortemplates/graytemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'orange'): ?>
-    <?php require('view/frontend/colortemplates/orangetemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'pink'): ?>
-    <?php require('view/frontend/colortemplates/pinktemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
-    <?php require('view/frontend/colortemplates/aquatemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'red'): ?>
-    <?php require('view/frontend/colortemplates/redtemplate.php'); ?>
-<?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'yellow'): ?>
-    <?php require('view/frontend/colortemplates/yellowtemplate.php'); ?>
-<?php else: ?>
-    <?php require('template.php'); ?>
-<?php endif; ?>
+<script src="public/js/jquery.min.js"></script>
+        <script src="public/js/bootstrap.min.js"></script>
+        <script src="public/js/jquery.popconfirm.js"></script>
+        <script src="public/js/jquery.themepunch.tools.min.js"></script>
+        <script src="public/js/classie.js"></script>
+        <script src="public/js/plugins.js"></script>
+        <script src="public/js/scripts.js"></script>
+        <script>
+            $.backstretch(["public/images/art/react2.png"]);
+        </script>
+        <script>
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip({
+                    trigger: 'manual'
+                }).tooltip('show');
+            });
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 2600) { // scroll down abit and get the action   
+                    $(".progress-bar").each(function () {
+                        each_bar_width = $(this).attr('aria-valuenow');
+                        $(this).width(each_bar_width + '%');
+                    });
+                }
+            });
+        </script>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'UA-101090553-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+        <script>
+            ////////// Simple usage //////////
+            $(".popconfirm").popConfirm();
+
+            ///////// Complete usage //////////
+
+            // (example jquery click event)
+            //$('#important_action').click(function() {
+                //alert('You clicked, and valided this button !');
+            //});
+
+            // Full featured example
+            $("[data-toggle='confirmation']").popConfirm({
+                title: "Certain ?",
+                content: "Dernière chance !",
+                placement: "left",
+                yesBtn: 'Oui',
+              noBtn: 'Non'// (top, right, bottom, left)
+            });
+        </script>
+    </body>
+</html>

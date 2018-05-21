@@ -44,17 +44,20 @@
                             <p>Aucun résultat n'a été trouvé.</p>
                             <?php endif; ?>
 
+
                             <?php
-                                while($res = $countSearchResults->fetch());
-                                {
-                            ?>
-                            <ul>
-                            <li><?= $res['title']; ?></li>
-                            </ul>
-                            <?php
-                                }
-                                $countSearchResults->closeCursor();
-                            ?>
+                              while ($data = $results->fetch())
+                              {
+                              ?>
+                              <ul>
+                                <li>
+                                  <a href="index.php?action=blogpost&amp;id=<?= $data['id'] ?>"><?= htmlspecialchars($data['title']); ?></a>
+                                </li>
+                              </ul>
+                              <?php  
+                                } 
+                                $results->closeCursor();
+                              ?>
 
                         </div>
                     </div>

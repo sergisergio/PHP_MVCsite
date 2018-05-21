@@ -48,7 +48,7 @@ class UserManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 
-		$req = $dbProjet5->prepare('SELECT id, first_name, last_name, pseudo, password, email, confirmation_token, DATE_FORMAT(registration_date, \'%d/%m/%Y à %Hh%imin\') AS registration_date_fr, authorization, avatar, description, is_active
+		$req = $dbProjet5->prepare('SELECT id, first_name, last_name, pseudo, password, email, confirmation_token, DATE_FORMAT(registration_date, \'%d/%m/%Y à %Hh%i\') AS registration_date_fr, authorization, avatar, description, color, is_active
 			FROM Users 
 			WHERE id = ?');
 
@@ -63,7 +63,7 @@ class UserManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 
-		$req = $dbProjet5->prepare('SELECT id, first_name, last_name, pseudo, password, email, confirmation_token, DATE_FORMAT(registration_date, \'%d/%m/%Y à %Hh%imin\') AS registration_date_fr, authorization, avatar, description, is_active
+		$req = $dbProjet5->prepare('SELECT authorization
 			FROM Users 
 			WHERE pseudo = ?
 			');
@@ -73,20 +73,9 @@ class UserManager extends Manager
 		$access = $req->fetch();
 		return $access;
 	}
-
-/* ************** 4 . MODIFIER UN MEMBRE *******************************/
-	/*public function modifyUserRequest($userId){
-
-		$dbProjet5 = $this->dbConnect();
-
-		$post = $dbProjet5->prepare('UPDATE Users SET title = ?, intro = ?, author = ?, content = ?, creation_date = NOW() WHERE id = ?');
-
-		$affectedPost = $post->execute(array($title, $intro, $author, $content, $postId));
-		
-		return $affectedPost;
-	}*/
 	
 /* ************** 5 . SUPPRIMER UN MEMBRE ******************************/
+
 	public function deleteUserRequest($userId){
         $dbProjet5 = $this->dbConnect();
 
@@ -98,6 +87,7 @@ class UserManager extends Manager
     }
 
 /* ************** 6 . INSCRIPTION **************************************/
+
 	public function addUserRequest($pseudo, $email, $passe){
 
 		$dbProjet5 = $this->dbConnect();
@@ -120,7 +110,7 @@ class UserManager extends Manager
         /* test mail local */
 		//mail($email, 'Confirmation de votre compte', "Afin de valider votre compte, merci de cliquer sur ce lien\n\nhttp://localhost:8888/Blog_Project5/index.php?action=confirmRegistration&id=$user_id&token=$token");
 
-		mail($email, 'Confirmation de votre compte', "Afin de valider votre compte, merci de cliquer sur ce lien\n\nhttp://www.projet5.philippetraon.com/index.php?action=confirmRegistration&id=$user_id&token=$token");
+		mail($email, 'Confirmation de votre compte', "Afin de valider votre compte, merci de cliquer sur ce lien\n\nhttp://www.blog.philippetraon.com/index.php?action=confirmRegistration&id=$user_id&token=$token");
 	}
     
 /* ************** 7 . CONFIRMATION INSCRIPTION *************************/
@@ -245,7 +235,7 @@ class UserManager extends Manager
 		    $dbProjet5->prepare('UPDATE Users SET reset_token = ?, reset_at = NOW() WHERE id = ?')->execute([$reset_token, $user_id]);
 
         	$subject = 'Changement de votre mot de passe';
-        	$body = "Afin de changer votre mot de passe, merci de cliquer sur ce lien :\n\nhttp://www.projet5.philippetraon.com/index.php?action=changePasswordPage&id=$user_id&token=$reset_token";
+        	$body = "Afin de changer votre mot de passe, merci de cliquer sur ce lien :\n\nhttp://www.blog.philippetraon.com/index.php?action=changePasswordPage&id=$user_id&token=$reset_token";
         	mail($email, $subject , $body);
 
         	/* test mail local */

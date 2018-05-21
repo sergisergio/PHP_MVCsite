@@ -6,7 +6,7 @@ class Manager
 {
 	protected function dbConnect()
 	{
-		$dbProjet5 = new \PDO('mysql:host=localhost;dbname=Projet5;charset=utf8', 'root', 'root');
+		$dbProjet5 = new \PDO('mysql:host=localhost;dbname=siteMVC', 'root', 'root');
 		return $dbProjet5;
 	}
 }

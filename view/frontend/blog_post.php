@@ -49,8 +49,12 @@
                                 ?> 
                             </div>
                             <div class="divide30"></div>
+                            <?php if ($post['file_extension'] != ''): ?>
                             <img src="public/images/posts/<?= $post['file_extension'] ?>" class="img-responsive" />
                             <div class="divide30"></div>
+                            <?php else: ?>
+                            <img src="public/images/posts/default.jpg" class="img-responsive" />
+                            <?php endif; ?>
                             <p>
                                 <?= nl2br(htmlspecialchars($post['content'])) ?>
                             </p>
@@ -59,19 +63,8 @@
                     </div>
                 </div>
                 <div class="divide20"></div>
-                <div class="blog-posts">
-                    <div class="post box">
-                        <h3>Ajouter un commentaire</h3>
-                            <?php if (isset($_SESSION['pseudo'])): ?>       
-                                <?php include "forms/form_addcomment.php"; ?>
-                            <?php else: ?> 
-                                <p>Vous devez être inscrit et connecté pour ajouter un commentaire !</p>
-                                <a href="index.php?action=signupPage">M'inscrire</a>&nbsp;&nbsp;
-                                <a href="index.php?action=loginPage">Me connecter</a>
-                            <?php endif; ?>
-                    </div>
-                </div>
-                <div class="divide20"></div>
+                
+                
                 <div class="blog-posts" id="comments">
                     <div class="post box">
                             <h3><i class="budicon-comment-2"></i>&nbsp;&nbsp;Commentaires (<?= $nbCount; ?>)</h3>
@@ -102,6 +95,19 @@
                     </div>
                 </div>
                 <div class="divide20"></div>
+                <div class="blog-posts">
+                    <div class="post box">
+                        <h3>Ajouter un commentaire</h3>
+                            <?php if (isset($_SESSION['pseudo'])): ?>       
+                                <?php include "forms/form_addcomment.php"; ?>
+                            <?php else: ?> 
+                                <p>Vous devez être inscrit et connecté pour ajouter un commentaire !</p>
+                                <a href="index.php?action=signupPage">M'inscrire</a>&nbsp;&nbsp;
+                                <a href="index.php?action=loginPage">Me connecter</a>
+                            <?php endif; ?>
+                    </div>
+                </div>
+                <div class="divide40"></div>
             </div>
                 <?php include "includes/aside.php"; ?>
             </div>

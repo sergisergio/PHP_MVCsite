@@ -23,7 +23,7 @@ class PostManager extends Manager
 	public function getPosts($start, $postsPerPage){
 		$dbProjet5 = $this->dbConnect();
 
-		$req = $dbProjet5->query('SELECT p.id, p.title, p.chapo, p.intro, p.content, u.pseudo AS author, p.file_extension, DATE_FORMAT(p.creation_date, \'%d/%m/%Y à %Hh%imin\') AS creation_date_fr, DATE_FORMAT(p.last_updated, \'%d/%m/%Y à %Hh%imin\') AS last_updated_fr 
+		$req = $dbProjet5->query('SELECT p.id, p.title, p.chapo, p.intro, p.content, u.pseudo AS author, p.file_extension, DATE_FORMAT(p.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(p.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
 			FROM Posts p
             INNER JOIN Users u ON u.id = p.author
 			ORDER BY creation_date DESC LIMIT '.$start.', '.$postsPerPage);
@@ -35,7 +35,7 @@ class PostManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 
-		$req = $dbProjet5->prepare('SELECT p.id, p.title, p.chapo, p.intro, p.content, u.pseudo AS author, p.file_extension, DATE_FORMAT(p.creation_date, \'%d/%m/%Y à %Hh%imin\') AS creation_date_fr, DATE_FORMAT(p.last_updated, \'%d/%m/%Y à %Hh%imin\') AS last_updated_fr 
+		$req = $dbProjet5->prepare('SELECT p.id, p.title, p.chapo, p.intro, p.content, u.pseudo AS author, p.file_extension, DATE_FORMAT(p.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(p.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
 			FROM Posts p
             INNER JOIN Users u ON u.id = p.author
 			WHERE p.id = ?');
@@ -99,7 +99,7 @@ class PostManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 
-		$countSearchResults  = $dbProjet5->query("SELECT * FROM Posts WHERE content LIKE '%$search%' ");
+		$countSearchResults  = $dbProjet5->query("SELECT id, title, chapo, content FROM Posts WHERE content LIKE '%$search%' ");
 
 		return $countSearchResults;
 	}
@@ -110,7 +110,7 @@ class PostManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 
-		$results  = $dbProjet5->prepare(" SELECT * FROM Posts WHERE content LIKE '%$search%' ORDER BY id DESC ");
+		$results  = $dbProjet5->prepare(" SELECT id, title, chapo, content FROM Posts WHERE content LIKE '%$search%' ORDER BY id DESC ");
 		$results->execute();
 		return $results;
 	}
