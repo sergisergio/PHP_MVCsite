@@ -219,6 +219,11 @@ function listPost(){
 
     $posts1 = $postManager->getPosts(0, 5);
     $post = $postManager->getPost($_GET['id']);
+    if (empty($post)) {
+        $_SESSION['flash']['danger'] = 'Aucun id ne correspond à ce billet !';
+        errors();
+        exit();
+    }
     $comments = $commentManager->getComments($_GET['id']);
     $user = $userManager->getUser($_GET['id']);
     $nbCount = $commentManager->countCommentRequest($_GET['id']);
@@ -245,11 +250,25 @@ function addComment($postId, $author, $content){
 function modifyCommentPage($commentId){
 	$postManager = new \Philippe\Blog\Model\PostManager();
 	$commentManager = new \Philippe\Blog\Model\CommentManager();
+    $userManager = new \Philippe\Blog\Model\UserManager();
 
 	$comment = $commentManager->getComment($commentId);
 	$post = $postManager->getPost($comment['post_id']);
-
-	require('view/frontend/modifyView.php');
+    $posts1 = $postManager->getPosts(0, 5);
+        if (($_SESSION['pseudo'] != $comment['author']) && ($_SESSION['autorisation'] == 0)) {
+            
+            $_SESSION['flash']['danger'] = 'Vous pouvez seulement modifier vos propres commentaires !';
+            errors();
+            exit();
+        }
+        elseif (empty($comment)){
+            $_SESSION['flash']['danger'] = 'Cet identifiant ne correspond à aucun commentaire !';
+            errors();
+            exit();
+        }
+        else {
+        require('view/frontend/modifyView.php');
+        }
 }
 
 /* **************** 17 . SUPPRIMER UN COMMENTAIRE ************/

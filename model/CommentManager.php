@@ -25,7 +25,7 @@ class CommentManager extends Manager
 	{
 		/* A revoir */
 		$dbProjet5 = $this->dbConnect();
-		$comments = $dbProjet5->prepare('SELECT c.id, u.pseudo AS author, c.content, DATE_FORMAT(c.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(c.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
+		$comments = $dbProjet5->prepare('SELECT c.id, u.pseudo AS author, u.avatar AS avatar, c.content, DATE_FORMAT(c.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(c.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
 			FROM Comments c
             INNER JOIN Users u ON u.id = c.author
 			WHERE c.post_id = ?
@@ -41,7 +41,7 @@ class CommentManager extends Manager
 
 		$dbProjet5 = $this->dbConnect();
 		
-		 $req = $dbProjet5->prepare('SELECT c.id, c.post_id, u.pseudo AS author, c.content, DATE_FORMAT(c.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(c.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
+		 $req = $dbProjet5->prepare('SELECT c.id, c.post_id, u.pseudo AS author, u.avatar AS avatar, c.content, DATE_FORMAT(c.creation_date, \'%d/%m/%Y à %Hh%i\') AS creation_date_fr, DATE_FORMAT(c.last_updated, \'%d/%m/%Y à %Hh%i\') AS last_updated_fr 
 		 	FROM Comments c
             INNER JOIN Users u ON u.id = c.author
 		 	WHERE c.id = ?');

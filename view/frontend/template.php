@@ -18,7 +18,23 @@
         <link href="public/css/prettify.css" rel="stylesheet">
         <link href="public/style.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <link href="public/css/color/green.css" rel="stylesheet">
+        <?php if(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'aqua'): ?>
+        <link href="public/css/color/aqua.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'blue'): ?>
+        <link href="public/css/color/blue.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'gray'): ?>
+        <link href="public/css/color/gray.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'orange'): ?>
+        <link href="public/css/color/orange.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'pink'): ?>
+        <link href="public/css/color/pink.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'red'): ?>
+        <link href="public/css/color/red.css" rel="stylesheet">
+        <?php elseif(isset($_SESSION['pseudo']) && $_SESSION['color'] == 'yellow'): ?>
+        <link href="public/css/color/yellow.css" rel="stylesheet">
+        <?php else: ?>
+            <link href="public/css/color/green.css" rel="stylesheet">
+        <?php endif; ?>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,800,700,600,500,300' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic' rel='stylesheet' type='text/css'>
         <link href="public/type/fontello.css" rel="stylesheet">
