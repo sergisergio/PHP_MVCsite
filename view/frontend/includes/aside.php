@@ -44,6 +44,7 @@
                                 <li><a href="https://openclassrooms.com/courses/testez-et-suivez-l-etat-de-votre-application-php" target="_blank">Tester une application PHP</a></li>
                                 <li><a href="https://openclassrooms.com/courses/testez-fonctionnellement-votre-application-symfony" target="_blank">Tester une application Symfony</a></li>
                                 <hr style="padding-bottom: 0px; margin-bottom: 20px;">
+<<<<<<< HEAD
                                 <li><a href="https://openclassrooms.com/courses/les-espaces-de-noms-en-php" target="_blank">Namespaces</a></li>
                                 <li><a href="https://openclassrooms.com/courses/php-utiliser-un-debogueur-pour-php-xdebug" target="_blank">Xdebug</a></li>
                                 <li><a href="https://openclassrooms.com/courses/realiser-un-moteur-de-recherche-pour-son-site" target="_blank">Moteur de recherche</a></li>
@@ -65,6 +66,10 @@
                                 <li><a href="https://openclassrooms.com/courses/atomik-framework-un-framework-php-simple-et-leger" target="_blank">Atomik framework</a></li>
                                 <hr style="padding-bottom: 0px; margin-bottom: 20px;">
                                 <li><a href="https://openclassrooms.com/courses/decouvrez-le-framework-php-laravel-1/presentation-generale-14" target="_blank">Laravel</a></li>
+=======
+                                <li><a href="https://openclassrooms.com/courses/upload-de-fichiers-par-formulaire" target="_blank">PHP : Upload de fichiers</a></li>
+
+>>>>>>> bda468c4038c0c0bf938d53533c754111bbf4fb9
                               </ul>
                             </div>
                         </div>

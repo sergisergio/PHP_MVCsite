@@ -391,17 +391,19 @@ function search($search){
 
 /* **************** 26 . MODIFIER LE PROFIL ******************************/
 
-function modifyProfile($userId, $first_name, $name, $email, $description){
+function modifyProfile($userId, $avatar, $first_name, $name, $email, $description){
 
     $userManager = new \Philippe\Blog\Model\UserManager();
 
-    $modifiedProfile = $userManager->modifyProfileRequest($userId, $first_name, $name, $email, $description);
+    $modifiedProfile = $userManager->modifyProfileRequest($userId, $avatar, $first_name, $name, $email, $description);
 
     if ($modifiedProfile === false) {
         throw new Exception('Impossible de modifier le profil');
     }
     else {
         header('Location: index.php?action=profilePage');
+        unset($_SESSION['avatar']);
+        $_SESSION['avatar'] = $avatar;
     }
 }
 
